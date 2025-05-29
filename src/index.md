@@ -160,7 +160,7 @@ Note that `clean` is doing two new things here:
 - It's not intended to be a filename. If you happen to have a file named `clean`, this target won't run, which is not what we want. See `.PHONY` later in this tutorial on how to fix this
 
 ```makefile
-some_file: 
+some_file:
 	touch some_file
 
 clean:
@@ -182,7 +182,7 @@ file1:
 	touch file1
 file2:
 	touch file2
- 
+
 clean:
 	rm -f file1 file2 some_file
 ```
@@ -205,7 +205,7 @@ all:
 	echo ${x}
 
 	# Bad practice, but works
-	echo $x 
+	echo $x
 ```
 
 # Targets
@@ -271,7 +271,7 @@ all: one two three four
 one: $(thing_wrong)
 
 # Stays as *.o if there are no files that match this pattern :(
-two: *.o 
+two: *.o
 
 # Works as you would expect! In this case, it does nothing.
 three: $(thing_right)
@@ -424,7 +424,7 @@ src_files = foo.raw bar.c lose.c
 
 all: $(obj_files)
 # Note: PHONY is important here. Without it, implicit rules will try to build the executable "all", since the prereqs are ".o" files.
-.PHONY: all 
+.PHONY: all
 
 # Ex 1: .o files depend on .c files. Though we don't actually make the .o file.
 $(filter %.o,$(obj_files)): %.o: %.c
@@ -432,7 +432,7 @@ $(filter %.o,$(obj_files)): %.o: %.c
 
 # Ex 2: .result files depend on .raw files. Though we don't actually make the .result file.
 $(filter %.result,$(obj_files)): %.result: %.raw
-	echo "target: $@ prereq: $<" 
+	echo "target: $@ prereq: $<"
 
 %.c %.raw:
 	touch $@
@@ -482,10 +482,10 @@ blah::
 # Commands and execution
 ## Command Echoing/Silencing
 <!--  (Section 5.1) -->
-Add an `@` before a command to stop it from being printed  
-You can also run make with `-s` to add an `@` before each line  
+Add an `@` before a command to stop it from being printed
+You can also run make with `-s` to add an `@` before each line
 ```makefile
-all: 
+all:
 	@echo "This make line will not be printed"
 	echo "But this will"
 ```
@@ -494,7 +494,7 @@ all:
 <!--  (Section 5.2) -->
 Each command is run in a new shell (or at least the effect is as such)
 ```makefile
-all: 
+all:
 	cd ..
 	# The cd above does not affect this line, because each command is effectively run in a new shell
 	echo `pwd`
@@ -534,8 +534,8 @@ all:
 
 ## Error handling with `-k`, `-i`, and `-`
 <!--  (Section 5.4) -->
-Add `-k` when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.  
-Add a `-` before a command to suppress the error  
+Add `-k` when running make to continue running even in the face of errors. Helpful if you want to see all the errors of Make at once.
+Add a `-` before a command to suppress the error
 Add `-i` to make to have this happen for every command.
 
 <!--  (Section 5.4) -->
@@ -612,12 +612,12 @@ clean:
 ```
 
 <!--  (Section 5.6) -->
-You need to export variables to have them run in the shell as well.  
+You need to export variables to have them run in the shell as well.
 ```makefile
 one=this will only work locally
 export two=we can run subcommands with this
 
-all: 
+all:
 	@echo $(one)
 	@echo $$one
 	@echo $(two)
@@ -648,15 +648,15 @@ clean:
 ## Arguments to make
 <!--  (Section 9) -->
 
-There's a nice [list of options](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run`, `--touch`, `--old-file`. 
+There's a nice [list of options](http://www.gnu.org/software/make/manual/make.html#Options-Summary) that can be run from make. Check out `--dry-run`, `--touch`, `--old-file`.
 
 You can have multiple targets to make, i.e. `make clean run test` runs the `clean` goal, then `run`, and then `test`.
 
 # Variables Pt. 2
 ## Flavors and modification
 <!-- (6.1, 6.2, 6.3) -->
-There are two flavors of variables:  
-- recursive (use `=`) - only looks for the variables when the command is *used*, not when it's *defined*.  
+There are two flavors of variables:
+- recursive (use `=`) - only looks for the variables when the command is *used*, not when it's *defined*.
 - simply expanded (use `:=`) - like normal imperative programming -- only those defined so far get expanded
 
 ```makefile
@@ -667,18 +667,18 @@ two := two ${later_variable}
 
 later_variable = later
 
-all: 
+all:
 	echo $(one)
 	echo $(two)
 ```
 
-Simply expanded (using `:=`) allows you to append to a variable. Recursive definitions will give an infinite loop error.  
+Simply expanded (using `:=`) allows you to append to a variable. Recursive definitions will give an infinite loop error.
 ```makefile
 one = hello
 # one gets defined as a simply expanded variable (:=) and thus can handle appending
 one := ${one} there
 
-all: 
+all:
 	echo $(one)
 ```
 
@@ -688,7 +688,7 @@ one = hello
 one ?= will not be set
 two ?= will be set
 
-all: 
+all:
 	echo $(one)
 	echo $(two)
 ```
@@ -701,14 +701,14 @@ after = $(with_spaces)there
 nullstring =
 space = $(nullstring) # Make a variable with a single space.
 
-all: 
+all:
 	echo "$(after)"
 	echo start"$(space)"end
 ```
 
 An undefined variable is actually an empty string!
 ```makefile
-all: 
+all:
 	# Undefined variables are just empty strings!
 	echo $(nowhere)
 ```
@@ -718,7 +718,7 @@ Use `+=` to append
 foo := start
 foo += more
 
-all: 
+all:
 	echo $(foo)
 ```
 
@@ -733,7 +733,7 @@ Here we ran make with `make option_one=hi`
 override option_one = did_override
 # Does not override command line arguments
 option_two = not_override
-all: 
+all:
 	echo $(option_one)
 	echo $(option_two)
 ```
@@ -751,7 +751,7 @@ export blah="I was set!"
 echo $$blah
 endef
 
-all: 
+all:
 	@echo "This prints 'I was set'"
 	@$(one)
 	@echo "This does not print 'I was set' because each command runs in a separate shell"
@@ -764,7 +764,7 @@ Variables can be set for specific targets
 ```makefile
 all: one = cool
 
-all: 
+all:
 	echo one is defined: $(one)
 
 other:
@@ -777,7 +777,7 @@ You can set variables for specific target *patterns*
 ```makefile
 %.c: one = cool
 
-blah.c: 
+blah.c:
 	echo one is defined: $(one)
 
 other:
@@ -847,7 +847,7 @@ endif
 *Functions* are mainly just for text processing. Call functions with `$(fn, arguments)` or `${fn, arguments}`. Make has a decent amount of [builtin functions](https://www.gnu.org/software/make/manual/html_node/Functions.html).
 ```makefile
 bar := ${subst not,"totally", "I am not superman"}
-all: 
+all:
 	@echo $(bar)
 
 ```
@@ -860,7 +860,7 @@ space := $(empty) $(empty)
 foo := a b c
 bar := $(subst $(space),$(comma),$(foo))
 
-all: 
+all:
 	@echo $(bar)
 ```
 
@@ -872,13 +872,13 @@ space := $(empty) $(empty)
 foo := a b c
 bar := $(subst $(space), $(comma) , $(foo)) # Watch out!
 
-all: 
+all:
 	# Output is ", a , b , c". Notice the spaces introduced
 	@echo $(bar)
 
 ```
 
-<!-- # 8.2, 8.3, 8.9 TODO do something about the fns   
+<!-- # 8.2, 8.3, 8.9 TODO do something about the fns
 # TODO 8.7 origin fn? Better in documentation?
 -->
 
@@ -909,7 +909,7 @@ all:
 
 ## The foreach function
 <!--  (Section 8.4) -->
-The foreach function looks like this: `$(foreach var,list,text)`. It converts one list of words (separated by spaces) to another. `var` is set to each word in list, and `text` is expanded for each word.  
+The foreach function looks like this: `$(foreach var,list,text)`. It converts one list of words (separated by spaces) to another. `var` is set to each word in list, and `text` is expanded for each word.
 This appends an exclamation after each word:
 ```makefile
 foo := who are you
@@ -950,7 +950,7 @@ all:
 <!--  (Section 8.8) -->
 shell - This calls the shell, but it replaces newlines with spaces!
 ```makefile
-all: 
+all:
 	@echo $(shell ls -la) # Very ugly because the newlines are gone!
 ```
 
@@ -1013,7 +1013,7 @@ clean:
 ## Multiline
 The backslash ("\\") character gives us the ability to use multiple lines when the commands are too long
 ```makefile
-some_file: 
+some_file:
 	echo This line is too long, so \
 		it is broken up into multiple lines
 ```
@@ -1024,7 +1024,7 @@ Adding `.PHONY` to a target will prevent Make from confusing the phony target wi
 some_file:
 	touch some_file
 	touch clean
- 
+
 .PHONY: clean
 clean:
 	rm -f some_file
@@ -1034,8 +1034,8 @@ clean:
 ## .delete_on_error
 <!-- (Section 5.4) -->
 
-The make tool will stop running a rule (and will propogate back to prerequisites) if a command returns a nonzero exit status.  
-`DELETE_ON_ERROR` will delete the target of a rule if the rule fails in this manner. This will happen for all targets, not just the one it is before like PHONY. It's a good idea to always use this, even though make does not for historical reasons.  
+The make tool will stop running a rule (and will propogate back to prerequisites) if a command returns a nonzero exit status.
+`DELETE_ON_ERROR` will delete the target of a rule if the rule fails in this manner. This will happen for all targets, not just the one it is before like PHONY. It's a good idea to always use this, even though make does not for historical reasons.
 
 ```makefile
 .DELETE_ON_ERROR:
@@ -1112,17 +1112,17 @@ clean:
 TODO: This example fails initially because blah.d doesn't exist. I'm not sure how to fix this example, there are probably better ones out there..
 
 # Generating Prerequisites Automatically (Section 4.12)
-Example requires: blah.c  
-Generating prereqs automatically  
-This makes one small makefile per source file  
-Notes:  
-1) $$ is the current process id in bash. $$$$ is just $$, with escaping. We use it to make a temporary file, that doesn't interfere with others if there is some parallel builds going on.  
-2) cc -MM outputs a makefile line. This is the magic that generates prereqs automatically, by looking at the code itself  
-3) The purpose of the sed command is to translate (for example):  
-    main.o : main.c defs.h  
-    into:  
-    main.o main.d : main.c defs.h  
-4) Running `make clean` will rerun the rm -f ... rule because the include line wants to include an up to date version of the file. There is such a target that updates it, so it runs that rule before including the file.  
+Example requires: blah.c
+Generating prereqs automatically
+This makes one small makefile per source file
+Notes:
+1) $$ is the current process id in bash. $$$$ is just $$, with escaping. We use it to make a temporary file, that doesn't interfere with others if there is some parallel builds going on.
+2) cc -MM outputs a makefile line. This is the magic that generates prereqs automatically, by looking at the code itself
+3) The purpose of the sed command is to translate (for example):
+    main.o : main.c defs.h
+    into:
+    main.o main.d : main.c defs.h
+4) Running `make clean` will rerun the rm -f ... rule because the include line wants to include an up to date version of the file. There is such a target that updates it, so it runs that rule before including the file.
 ```makefile
 # Run make init first, then run make
 # This outputs
