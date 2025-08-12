@@ -142,7 +142,7 @@ blah.c:
 
 If you delete `blah.c`, all three targets will be rerun. If you edit it (and thus change the timestamp to newer than `blah.o`), the first two targets will run. If you run `touch blah.o` (and thus change the timestamp to newer than `blah`), then only the first target will run. If you change nothing, none of the targets will run. Try it out!
 
-This next example doesn't do anything new, but is nontheless a good additional example. It will always run both targets, because `some_file` depends on `other_file`, which is never created.
+This next example doesn't do anything new, but is nonetheless a good additional example. It will always run both targets, because `some_file` depends on `other_file`, which is never created.
 ```makefile
 some_file: other_file
 	echo "This will always run, and runs second"
